@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DrawLine : MonoBehaviour
 {
@@ -12,7 +13,10 @@ public class DrawLine : MonoBehaviour
     [SerializeField] private Mesh mesh;
     [SerializeField] private Camera cam;
     [SerializeField] private PathScript pathScript;
-    [SerializeField] private MeshCollider meshCollider;
+    [SerializeField] private MeshCollider meshColliderR;
+    [SerializeField] private MeshCollider meshColliderL;
+    [SerializeField] private NavMeshAgent navMeshAgent;
+    [SerializeField] private Transform point;
 
 
     // Structure for line points
@@ -66,14 +70,17 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isMousePressed = false;
-            pathScript.line = line;
+            //pathScript.line = line;
 
             //pathScript.MakePath(line);
             line.BakeMesh(mesh,cam,true);
 
-            Mesh mem = meshCollider.sharedMesh;
-            meshCollider.sharedMesh = mem;
+            Mesh mem1 = meshColliderR.sharedMesh;
+            meshColliderR.sharedMesh = mem1;
+            Mesh mem2 = meshColliderL.sharedMesh;
+            meshColliderL.sharedMesh = mem2;
 
+            navMeshAgent.destination = point.position;
             //pathScript.MakeMeshCollider();
         }
 
@@ -89,13 +96,6 @@ public class DrawLine : MonoBehaviour
             }
         }
     }
-
-    [ContextMenu("Reset Mesh")]
-    private void ResetMesh()
-    {
-        //mesh.Clear();
-    }
-
     private bool checkPoints(Vector3 pointA, Vector3 pointB)
     {
         return (pointA.x == pointB.x && pointA.y == pointB.y);

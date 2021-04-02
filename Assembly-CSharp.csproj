@@ -62,10 +62,11 @@
     <Compile Include="Assets\Scripts\ScriptsForTest\TestPolygon.cs" />
     <Compile Include="Assets\Scripts\ScriptsForTest\Triangulator.cs" />
     <Compile Include="Assets\Scripts\Reset Meshes\Rebuild_sphere.cs" />
+    <Compile Include="Assets\Scripts\PathScript.cs" />
     <Compile Include="Assets\Scripts\ScriptsForTest\DrawFigure.cs" />
     <Compile Include="Assets\Scripts\ScriptsForTest\MeshActions.cs" />
     <Compile Include="Assets\Scripts\ScriptsForTest\ColliderMaker.cs" />
-    <Compile Include="Assets\Scripts\PathScript.cs" />
+    <Compile Include="Assets\Finish.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
