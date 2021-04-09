@@ -17,6 +17,7 @@ public class DrawLine : MonoBehaviour
     [SerializeField] private MeshCollider meshColliderL;
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private Transform point;
+    [SerializeField] private Animator animator;
 
 
     // Structure for line points
@@ -43,11 +44,12 @@ public class DrawLine : MonoBehaviour
     }
     //    -----------------------------------    
 
-    private void MakeMeshCollider()
+    private void Start()
     {
-
+        meshColliderR.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        meshColliderL.gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
-    void Update()
+    private void Update()
     {
         mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         mousePos.z = 1.5f;
@@ -60,32 +62,15 @@ public class DrawLine : MonoBehaviour
             line.SetVertexCount(0);
             pointsList.RemoveRange(0, pointsList.Count);
             line.SetColors(Color.green, Color.green);
-            print("LMB pressed, isMousePressed = " + isMousePressed);
-
-
-
-
-
         }
         if (Input.GetMouseButtonUp(0))
         {
             isMousePressed = false;
-            //pathScript.line = line;
+            line.BakeMesh(mesh,cam,true); //show mesh
 
-            //pathScript.MakePath(line);
-            line.BakeMesh(mesh,cam,true);
+            ActivateMeshAndMove();
 
-            Mesh mem1 = meshColliderR.sharedMesh;
-            meshColliderR.sharedMesh = mem1;
-            Mesh mem2 = meshColliderL.sharedMesh;
-            meshColliderL.sharedMesh = mem2;
-
-            navMeshAgent.destination = point.position;
-            //pathScript.MakeMeshCollider();
         }
-
-        // Drawing line when mouse is moving(presses)
-
         if (isMousePressed)
         {
             if (!pointsList.Contains(mousePos))
@@ -95,6 +80,20 @@ public class DrawLine : MonoBehaviour
                 line.SetPosition(pointsList.Count - 1, (Vector3)pointsList[pointsList.Count - 1]);
             }
         }
+    }
+    private void ActivateMeshAndMove()
+    {
+        meshColliderR.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        meshColliderL.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
+        Mesh mem1 = meshColliderR.sharedMesh;
+        meshColliderR.sharedMesh = mem1;
+        Mesh mem2 = meshColliderL.sharedMesh;
+        meshColliderL.sharedMesh = mem2;
+
+        animator.SetBool("isWalking", true);
+
+        navMeshAgent.destination = point.position;
     }
     private bool checkPoints(Vector3 pointA, Vector3 pointB)
     {
